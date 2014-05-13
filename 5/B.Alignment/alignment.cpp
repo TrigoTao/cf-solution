@@ -12,6 +12,7 @@ int main(){
   queue<string> text;
   string s;
   int maxl = 0 ,i;
+  int alt[2] = {0,1};
 
   while(getline(cin,s)){
     if( maxl < s.length() )
@@ -26,15 +27,17 @@ int main(){
   while(!text.empty()){
     s = text.front();
     cout<<"*";
-    for( i=0 ; i < ( maxl - s.length() )/2 ; i++ ){
+    for( i=0 ; i < ( maxl - s.length() + alt[0] )/2 ; i++ ){
       cout<<" ";
     }
     cout<<s;
-    for( i=0 ; i < ( maxl - s.length() + 1 )/2 ; i++ ){
+    for( i=0 ; i < ( maxl - s.length() + alt[1] )/2 ; i++ ){
       cout<<" ";
     }
     cout<<"*\n";
     text.pop();
+    alt[0] = !alt[0];
+    alt[1] = !alt[1];
   }
   for(i=0; i<maxl+2; i++){
     cout<<"*";
