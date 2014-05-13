@@ -36,8 +36,10 @@ int main(){
     }
     cout<<"*\n";
     text.pop();
-    alt[0] = !alt[0];
-    alt[1] = !alt[1];
+    if( 0 != (maxl-s.length())%2 ){
+      alt[0] = !alt[0];
+      alt[1] = !alt[1];
+    }
   }
   for(i=0; i<maxl+2; i++){
     cout<<"*";
