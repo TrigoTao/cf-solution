@@ -31,17 +31,18 @@ int main(){
 #endif
 
   string s;
-  int maxl,len;
+  int maxl=0,len=0;
   int begin=0,next=0;
   int n=0;
 
   cin>>s;
 
   while(begin<s.size()){
+    next = findLong(s,begin);
+
 #ifndef ONLINE_JUDGE
     cout<<begin<<endl;
 #endif
-    next = findLong(s,begin);
 
     if( next == s.size()+1 )
       begin = next;
