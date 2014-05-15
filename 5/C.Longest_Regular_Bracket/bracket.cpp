@@ -3,21 +3,31 @@
 
 using namespace std;
 
-int findLong(const string &s, int begin){
-  int left=0;
-  int next = begin+1;
+#define INF 10000000
 
-  while(left>-1 && begin<s.size()){
-    if('(' == s[begin])
+int findLong(const string &s, int begin, int &len){
+  int left=0,minleft = INF;
+  int next = begin+1, step = begin;
+
+  len=0;
+  while(left>-1 && step<s.size()){
+    if('(' == s[step])
       left++;
-    else
+    else{
       left--;
+      if(left<minleft)
+        minleft = left;
+    }
 
-    if(left == 0)
-      next = begin+1;
+    if(left == 0){
+      next = step+1;
+      len = next - begin;
+    }
 
-    begin++;
+    step++;
   }
+  if(minleft>0)
+    next += minleft-1;
 
   return next;
 }
@@ -35,28 +45,22 @@ int main(){
   cin>>s;
 
   while(begin<s.size()){
-    next = findLong(s,begin);
+    begin = findLong(s,begin,len);
 
 #ifndef ONLINE_JUDGE
     cout<<begin<<endl;
 #endif
 
-    if(next == begin+1)
-      begin = next;
-    else{
-      len = next-begin;
-      if(len>maxl){
-        maxl = len;
-        n=1;
-      }else if(len==maxl)
-        n++;
-
-      begin = next;
-    }
+    if(len>maxl){
+      maxl = len;
+      n=1;
+    }else if(len==maxl)
+      n++;
   }
 
-  if(0==n)
+  if(maxl==0){
     n=1;
+  }
   cout<<maxl<<" "<<n<<endl;
 #ifndef ONLINE_JUDGE
   fclose(stdin);
