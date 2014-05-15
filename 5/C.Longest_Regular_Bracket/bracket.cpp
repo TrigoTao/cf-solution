@@ -5,6 +5,7 @@ using namespace std;
 
 int findLong(const string &s, int begin){
   int left=0;
+  int next = begin+1;
 
   while(left>-1 && begin<s.size()){
     if('(' == s[begin])
@@ -12,17 +13,13 @@ int findLong(const string &s, int begin){
     else
       left--;
 
+    if(left == 0)
+      next = begin+1;
+
     begin++;
   }
 
-  //return next begin
-  if(begin == s.size())
-    if(left == 0)
-      return begin;
-    else
-      return begin+1;
-  else //left == -1
-    return begin-1;
+  return next;
 }
 
 int main(){
@@ -44,10 +41,8 @@ int main(){
     cout<<begin<<endl;
 #endif
 
-    if( next == s.size()+1 )
+    if(next == begin+1)
       begin = next;
-    else if(next == begin)
-      begin++;
     else{
       len = next-begin;
       if(len>maxl){
