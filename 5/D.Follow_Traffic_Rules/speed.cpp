@@ -11,19 +11,20 @@ int main(){
 #endif
 
   double a,v,d,l,w;
-  double t[3],tw,tv,s[2];
+  double t[3],tw[2],tv,s[2];
 
   cout<<setprecision(5)<<std::fixed;
 
   cin>>a>>v>>l>>d>>w;
   w = w > v ? v : w;
 
-  tw = w/a;
-  s[0] = a*tw*tw/2;
+  tw[0] = w/a;
+  s[0] = a*tw[0]*tw[0]/2;
   if(s[0]>d){
     t[0] = sqrt(d*2/a);
   }else{
-    t[0] = tw + (d-s[0])/w;
+    tw[1] = ( sqrt((d-s[0])*a+w*w)-w )/a *2;
+    t[0] = tw[0] + tw[1];
   }
 
   tv = (v-w)/a;
