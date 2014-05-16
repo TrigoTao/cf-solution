@@ -1,36 +1,12 @@
 #include<cstdio>
 #include<iostream>
+#include<stack>
 
 using namespace std;
 
-#define INF 10000000
+#define MAXN 1000000
 
-int findLong(const string &s, int begin, int &len){
-  int left=0,minleft = INF;
-  int next = begin+1, step = begin;
-
-  len=0;
-  while(left>-1 && step<s.size()){
-    if('(' == s[step])
-      left++;
-    else{
-      left--;
-      if(left<minleft)
-        minleft = left;
-    }
-
-    if(left == 0){
-      next = step+1;
-      len = next - begin;
-    }
-
-    step++;
-  }
-  if(minleft>0)
-    next += minleft-1;
-
-  return next;
-}
+int len[MAXN]={0};
 
 int main(){
 #ifndef ONLINE_JUDGE
@@ -38,30 +14,33 @@ int main(){
 #endif
 
   string s;
-  int maxl=0,len=0;
-  int begin=0,next=0;
-  int n=0;
-
+  stack<int> st;
+  int k,maxl=0,n=0;
   cin>>s;
 
-  while(begin<s.size()){
-    begin = findLong(s,begin,len);
+  for(int i=0; i<s.size(); i++){
+    if('(' == s[i]){
+      st.push(i);
+    }else{
+      if(!st.empty()){
+        k = st.top();
+        st.pop();
 
-#ifndef ONLINE_JUDGE
-    cout<<begin<<endl;
-#endif
-
-    if(len>maxl){
-      maxl = len;
-      n=1;
-    }else if(len==maxl)
-      n++;
+        len[i] = ( k>0 ? len[k-1] : 0 ) + i+1-k;
+        if(len[i]>maxl){
+          maxl = len[i];
+          n = 1;
+        }else if(len[i]==maxl)
+          n++;
+      }
+    }
   }
 
-  if(maxl==0){
-    n=1;
-  }
-  cout<<maxl<<" "<<n<<endl;
+  if(maxl>0)
+    cout<< maxl << " " << n << endl;
+  else
+    cout<<"0 1"<<endl;
+
 #ifndef ONLINE_JUDGE
   fclose(stdin);
 #endif
