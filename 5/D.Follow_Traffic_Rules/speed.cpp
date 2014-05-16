@@ -12,6 +12,7 @@ int main(){
 
   double a,v,d,l,w;
   double t[3],tw[2],tv,s[2];
+  double tmpt,tmps;
 
   cout<<setprecision(5)<<std::fixed;
 
@@ -22,8 +23,15 @@ int main(){
   s[0] = a*tw[0]*tw[0]/2;
   if(s[0]>d){
     t[0] = sqrt(d*2/a);
+    w = a*t[0];
   }else{
-    tw[1] = ( sqrt((d-s[0])*a+w*w)-w )/a *2;
+    tmpt = (v-w)/a;
+    tmps = a*tmpt*tmpt/2+w*tmpt;
+    if( tmps > ( d-s[0] )/2 ){
+      tw[1] = ( sqrt((d-s[0])*a+w*w)-w )/a * 2;
+    }else{
+      tw[1] = tmpt*2 + (d-s[0]-tmps*2)/v; 
+    }
     t[0] = tw[0] + tw[1];
   }
 
