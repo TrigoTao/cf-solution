@@ -14,23 +14,28 @@ class HillCircle{
 
     int _searchOneSide(int begin, int &end, int (HillCircle::*move)(int) ){
       int iter = (this->*move)(begin);
-      int maxh = hills[iter];
+      int maxh = hills[iter], maxp = iter;
       int res = 0;
       
       //cout << "begin: " << begin << "\tnext:" << iter<<endl;
       
-      if(iter == end || maxh > hills[begin])
+      if(iter == end || maxh > hills[begin]){
+        end = maxp;
         return 0;
+      }
     
       for(iter = (this->*move)(iter); hills[iter] <= hills[begin] && iter != end; iter = (this->*move)(iter)){
         if(hills[iter]>=maxh){
           maxh = hills[iter];
+          maxp = iter;
           res++;
         }
       }
       if( iter != end ){
         res++;
         end = iter;
+      }else{
+        end = maxp;
       }
 
       //cout << "res: " << res << "\tnew end: " << end <<endl;
