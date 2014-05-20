@@ -12,27 +12,28 @@ class HillCircle{
     int hills[MAXN];
     int pn;
 
-    int _searchOneSide(int begin, int (HillCircle::*move)(int) ){
+    int _searchOneSide(int begin, int &end, int (HillCircle::*move)(int) ){
       int iter = (this->*move)(begin);
       int maxh = hills[iter];
       int res = 0;
       
       //cout << "begin: " << begin << "\tnext:" << iter<<endl;
       
-      if(n <= 2 || maxh > hills[begin])
+      if(iter == end || maxh > hills[begin])
         return 0;
     
-      for(iter = (this->*move)(iter); hills[iter] <= hills[begin] && (this->*move)(iter) != begin; iter = (this->*move)(iter)){
+      for(iter = (this->*move)(iter); hills[iter] <= hills[begin] && iter != end; iter = (this->*move)(iter)){
         if(hills[iter]>=maxh){
           maxh = hills[iter];
           res++;
         }
       }
-      if( (this->*move)(iter) != begin ){
+      if( iter != end ){
         res++;
+        end = iter;
       }
 
-      //cout << "res: " << res<<endl;
+      //cout << "res: " << res << "\tnew end: " << end <<endl;
       return res;
     }
 
@@ -54,9 +55,11 @@ class HillCircle{
     }
 
     void run(){
+      int tmp;
       for(int i=0; i<n; i++){
-        pn += _searchOneSide(i,&HillCircle::preHillP);
-        pn += _searchOneSide(i,&HillCircle::nextHillP);
+        tmp = nextHillP(i);
+        pn += _searchOneSide(i,tmp,&HillCircle::preHillP);
+        pn += _searchOneSide(i,tmp,&HillCircle::nextHillP);
       }
       pn = pn/2 + n;
     }
