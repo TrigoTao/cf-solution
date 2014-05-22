@@ -3,89 +3,82 @@
 
 using namespace std;
 
-#define MAXN 1000000
+#define MAXN 1000001
 
+int h[MAXN]={0},l[MAXN]={0},r[MAXN]={0},c[MAXN]={0};
+int n;
 
-class HillCircle{
-  private:
-    int n;
-    int hills[MAXN];
-    int pn;
+void rotate(int offset){
+  int tmp[MAXN];
+  for(int i=0; i<n; i++){
+    tmp[i] = h[i];
+  } 
+  for(int i=0; i<n; i++){
+    h[i] = tmp[(i+offset)%n];
+  }
+  h[n] = h[0];
+}
 
-    int _searchOneSide(int begin, int &end, int (HillCircle::*move)(int) ){
-      int iter = (this->*move)(begin);
-      int maxh = hills[iter], maxp = iter;
-      int res = 0;
-      
-      //cout << "begin: " << begin << "\tnext:" << iter<<endl;
-      
-      if(iter == end || maxh > hills[begin]){
-        end = maxp;
-        return 0;
-      }
-    
-      for(iter = (this->*move)(iter); hills[iter] <= hills[begin] && iter != end; iter = (this->*move)(iter)){
-        if(hills[iter]>=maxh){
-          maxh = hills[iter];
-          maxp = iter;
-          res++;
-        }
-      }
-      if( iter != end ){
-        res++;
-        end = iter;
-      }else{
-        end = maxp;
-      }
+void calInfo(){
+  int i;
 
-      //cout << "res: " << res << "\tnew end: " << end <<endl;
-      return res;
+  l[0] = n;
+  for(i=1; i<n ; i++){
+    l[i] = i-1;
+    while(h[i]>h[l[i]])
+      l[i] = l[l[i]];
+    if(h[i] == h[l[i]]){
+      c[i] = c[l[i]]+1;
+      l[i] = l[l[i]];
     }
+  }
 
-  public:
-    void getInput(){
-      cin >> n;
-      for(int i=0; i<n; i++){
-        cin>> hills[i];
-      }
-      pn = 0;
+  r[n] = n;
+  for(i=n-1; i>=0; i--){
+    r[i] = i+1;
+    while(h[i]>h[r[i]])
+      r[i] = r[r[i]];
+    if(h[i] == h[r[i]]){
+      r[i] = r[r[i]];
     }
+  }
+}
 
-    int nextHillP(int now){
-      return now+1 == n ? 0 : now+1;
+int getRes(){
+  int res =0;
+
+  for(int i=1; i<n; i++){
+    if(h[i] < h[0]){
+      if(l[i] == 0 && r[i] == n){
+        res ++;
+      }else
+        res += 2;
     }
+    res += c[i];
+    //cout<< c[i]<<"\t";
+  }
 
-    int preHillP(int now){
-      return now-1 == -1 ? n-1 : now-1;
-    }
-
-    void run(){
-      int tmp;
-      for(int i=0; i<n; i++){
-        tmp = nextHillP(i);
-        pn += _searchOneSide(i,tmp,&HillCircle::preHillP);
-        pn += _searchOneSide(i,tmp,&HillCircle::nextHillP);
-      }
-      pn = pn/2 + n;
-    }
-
-    int output(){
-      cout << pn <<endl;
-    }
-
-};
-
+  return res;
+}
 
 int main(){
 #ifndef ONLINE_JUDGE
   freopen("data","r",stdin);
 #endif
 
-  HillCircle hc;
+  int max=0,maxp;
+  cin >> n;
+  for(int i = 0; i<n; i++){
+    cin >> h[i];
+    if(h[i]>max){
+      max = h[i];
+      maxp = i;
+    }
+  }
 
-  hc.getInput();
-  hc.run();
-  hc.output();
+  rotate(maxp);
+  calInfo();
+  cout<< getRes() <<endl;
 
 #ifndef ONLINE_JUDGE
   fclose(stdin);
