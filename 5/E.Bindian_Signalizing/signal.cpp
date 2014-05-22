@@ -44,8 +44,8 @@ void calInfo(){
   }
 }
 
-long getRes(){
-  long res =0;
+long long getRes(){
+  long long res =0;
 
   for(int i=1; i<n; i++){
     if(h[i] < h[0]){
